@@ -1,9 +1,8 @@
 
 #-------------------------------------------------------------------------
-# Effects of defensive stats on wins 
+#  TRAINING WITH FOOTBALL ANALYTICS WITH R CODE
 #-------------------------------------------------------------------------
 
-# Testing with Football Analytics with R
 
 library(tidyverse)
 library(dplyr)
@@ -16,7 +15,7 @@ library(kableExtra)
 
 
 
-data = load_pbp(2024)
+data = load_pbp(2016:2022)
 
 demo_data_r = tibble(down = c("first", "second"),
                      ydstogo = c(10, 5))
@@ -86,3 +85,52 @@ pbp_run_r =
   mutate(ryoe = resid(expected_yards_r))
 
 summary(expected_yards_r)
+
+expected_yards_r %>% 
+  tidy(conf.int = TRUE) %>% 
+  kbl(format = "pipe", digits = 2) %>% 
+  kable_styling()
+
+ryoe_r = 
+  pbp_run_r %>% 
+  group_by(season, rusher_id, rusher) %>% 
+  summarize(
+    n = n(), ryoe_total = sum(ryoe), ryoe_per = mean(ryoe),
+    yards_per_carry = mean(rushing_yards)
+  ) %>% 
+  filter(n > 50)
+
+ryoe_r %>% 
+  arrange(-ryoe_total) %>% 
+  print()
+
+ryoe_r %>% 
+  filter(n > 50) %>% 
+  arrange(-ryoe_per) %>% 
+  print()
+
+ryoe_now_r =
+  ryoe_r %>% 
+  select(-n, -ryoe_total)
+
+ryoe_last_r =
+  ryoe_r %>% 
+  select(-n, -ryoe_total) %>% 
+  mutate(season = season + 1) %>% 
+  rename(ryoe_per_last = ryoe_per,
+  yards_per_carry_last = yards_per_carry)
+
+ryoe_lag_r =
+  ryoe_now_r %>% 
+  inner_join(ryoe_last_r,
+            by = c("rusher_id", "rusher", "season")) %>% 
+  ungroup()
+
+
+ryoe_lag_r %>% 
+  select(yards_per_carry, yards_per_carry_last) %>% 
+  cor(use = "complete.obs")
+
+ryoe_lag_r %>% 
+  select(ryoe_per, ryoe_per_last) %>% 
+  cor(use = "complete.obs")
