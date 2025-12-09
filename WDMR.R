@@ -12,6 +12,8 @@ library(broom)
 library(kableExtra)
 library(pscl)
 library(car)
+library(knitr)
+
 
 
 pbp = load_pbp(2018:2022) #load the data
@@ -89,7 +91,7 @@ model = glm(
 summary(model)
 
 model %>% 
-  tidy(model, conf.int = TRUE, conf.level = 0.95, exponentiate = TRUE) %>% 
+  tidy(model, conf.int = FALSE, conf.level = 0.95, exponentiate = TRUE) %>% 
   kbl(format = "pipe", digits = 2) %>% 
   kable_styling()
 
