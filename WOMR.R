@@ -13,6 +13,8 @@ library(broom)
 library(kableExtra)
 library(pscl)
 library(car)
+library(boot)
+library(statmod)
 
 # Load play-by-play data
 pbp = load_pbp(2018:2022) 
@@ -106,3 +108,9 @@ summary(model_2)
     kable_styling()
 
 anova(model_1, test = "Chisq")
+
+
+# Plots model 1
+glm.diag.plots(model_1)
+qqnorm(qres.binom(model_1))
+

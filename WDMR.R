@@ -102,3 +102,7 @@ pR2(model)
 
 anova(model, test = "Chisq")
 
+# QQ PLOTS OF THE MODEL 
+
+qqnorm(qres.binom(model))
+glm.diag.plots(model)
