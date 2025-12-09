@@ -11,6 +11,7 @@ library(ggrepel)
 library(broom)
 library(kableExtra)
 library(pscl)
+library(car)
 
 
 pbp = load_pbp(2018:2022) #load the data
