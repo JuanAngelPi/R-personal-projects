@@ -126,14 +126,10 @@ vif(model_combined)
 # Pseudo R-squared
 pR2(model_combined)
 
-# ANOVA TEST
+# LIKELIHOOD RATIO TEST
 anova(model_combined, test = "Chisq")
 
 
 # Q-Q PLOTS
 glm.diag.plots(model_combined)
-qqnorm(qres.binom(model_combined))
-
-
-cor.test(final_data$interceptions, final_data$points_scored)
-cor.test(final_data$sacks, final_data$points_scored)
+qqnorm(qres.binom(model_combined))gfb s
